@@ -6,6 +6,10 @@ where c.CUST_Id in (select Cust_Id from T13_CLAIM cl where cl.Claim_Status="pend
 select c.* from T13_CUSTOMER c
 where (select sum(pp.Premium_Payment_Amount) from T13_PREMIUM_PAYMENT pp, T13_VEHICLE v where c.CUST_Id = v.Cust_Id and v.Vehicle_Id = pp.Vehicle_Id) > 
 (select sum(trim(leading 'T13' from cc.CUST_Id)) from T13_CUSTOMER cc);
+					-- OR
+ select c.* from T13_CUSTOMER c where c.CUST_Id in(select v.Cust_Id from T13_VEHICLE v where v.Vehicle_Id in
+ (select pr.Vehicle_Id from T13_PREMIUM_PAYMENT pr where pr.Premium_Payment_Amount>
+ (select sum(trim(leading 'T13' from cc.CUST_Id)) from T13_CUSTOMER cc)));
 
 -- query 3
 select c.* from T13_INSURANCE_COMPANY c
